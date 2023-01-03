@@ -18,3 +18,4 @@ jobs:
           server: ftp.armandosoares.com.br
           username: u998825746.tanayoupop
           password: Arma312FJN$
+          server-dir: /backend/
