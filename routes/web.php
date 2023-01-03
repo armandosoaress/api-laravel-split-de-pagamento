@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return "11kjhb1";
+    return "barry allen";
 });
 
 Route::get('/qq', function () {
