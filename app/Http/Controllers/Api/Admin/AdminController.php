@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\equipeuser;
-use App\Models\Dadosuser;
+use App\Models\dadosuser;
 use App\Models\pagamento;
 use App\Models\motoboys;
 use App\Models\hierarquia;
@@ -140,7 +140,7 @@ class AdminController extends Controller
 
             //inserindo na tabela dados user para motoboy
 
-            $Dadosuser = new Dadosuser;
+            $Dadosuser = new dadosuser;
             $Dadosuser->dados_user_id =  $user->id;
             $Dadosuser->save();
 
@@ -161,6 +161,8 @@ class AdminController extends Controller
                 ->where('equipe_user.nivel_de_acesso_dependent', '=', "Recrutador")
                 ->where('equipe_user.user_id', '=', $request->dependent_supervisor)
                 ->get();
+
+
 
             $equipeuser = new equipeuser;
             $equipeuser->dependent_user_id = $recrutador[0]->dependent_user_id;
