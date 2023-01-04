@@ -29,6 +29,16 @@ class AssasController extends Controller
         return  $response->json();
     }
 
+    public function listpaymotoboy(request $request)
+    {
+        $response = Http::withHeaders([
+            'access_token' => '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAyNDkwNTc6OiRhYWNoX2ZkOTI1MzgxLWE1ZWYtNDhhNS1iYjhmLTAwZTEwODNlMDJmOQ==',
+        ])
+            ->get('https://www.asaas.com/api/v3/payments?limit=100&externalReference='.$request->externalReference);
+
+        return  $response->json();
+    }
+
     public function pay(request $request)
     {
         $response = Http::withBody(

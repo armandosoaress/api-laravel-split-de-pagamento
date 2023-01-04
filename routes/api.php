@@ -67,6 +67,7 @@ Route::middleware('auth:sanctum')->post('/cadcliente',  [AssasController::class,
 Route::middleware('auth:sanctum')->get('/pagamentoid',  [AssasController::class, 'listpayid']);
 Route::middleware('auth:sanctum')->get('/cliente',  [AssasController::class, 'cliente']);
 Route::middleware('auth:sanctum')->get('/custumermy',  [AssasController::class, 'custumerporiddomeubanco']);
+Route::middleware('auth:sanctum')->get('/pagamentomotoboy',  [AssasController::class, 'listpaymotoboy']);
 //
 
 //rotas de pagamento
