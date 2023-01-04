@@ -602,10 +602,31 @@ class AdminController extends Controller
 
             $idrecrutador = $recrutador[0]->dependent_user_id;
 
+
+             //atualizar saldo
+             $saldosupervisor = DB::table('dados_hirarquia_pagamento')
+             ->select(
+                 'valor_a_pagar'
+             )
+             ->where('dados_hirarquia_pagamento.dependent_user_id', '=', $idrecrutador)
+             ->limit(1)
+             ->orderBy('id', 'desc')
+             ->get();
+
+
+         try {
+             $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
+         } catch (\Throwable $th) {
+             $saldo = 10;
+         }
+         //fim
+
+
             $equipeuser = new hierarquia;
             $equipeuser->dependent_user_id = $idrecrutador;
             $equipeuser->nivel_de_acesso_dependent = "recrutador";
             $equipeuser->motoboy_id =   $idmotoboy;
+            $equipeuser->valor_a_pagar =  $saldo;
             $equipeuser->save();
 
 
@@ -624,10 +645,29 @@ class AdminController extends Controller
 
             $idcoordenador = $coordenador[0]->dependent_user_id;
 
+                //atualizar saldo
+                $saldosupervisor = DB::table('dados_hirarquia_pagamento')
+                ->select(
+                    'valor_a_pagar'
+                )
+                ->where('dados_hirarquia_pagamento.dependent_user_id', '=', $idcoordenador)
+                ->limit(1)
+                ->orderBy('id', 'desc')
+                ->get();
+   
+   
+            try {
+                $saldo = $saldosupervisor[0]->valor_a_pagar + 15;
+            } catch (\Throwable $th) {
+                $saldo = 15;
+            }
+            //fim
+
             $equipeuser = new hierarquia;
             $equipeuser->dependent_user_id = $idcoordenador;
             $equipeuser->nivel_de_acesso_dependent = "coordenador";
             $equipeuser->motoboy_id =  $idmotoboy;
+            $equipeuser->valor_a_pagar =  $saldo;
             $equipeuser->save();
 
 
@@ -645,19 +685,58 @@ class AdminController extends Controller
 
             $idcho = $cho[0]->dependent_user_id;
 
+                //atualizar saldo
+                $saldosupervisor = DB::table('dados_hirarquia_pagamento')
+                ->select(
+                    'valor_a_pagar'
+                )
+                ->where('dados_hirarquia_pagamento.dependent_user_id', '=', $idcho)
+                ->limit(1)
+                ->orderBy('id', 'desc')
+                ->get();
+   
+   
+            try {
+                $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
+            } catch (\Throwable $th) {
+                $saldo = 10;
+            }
+            //fim
+
             $equipeuser = new hierarquia;
             $equipeuser->dependent_user_id = $idcho;
             $equipeuser->nivel_de_acesso_dependent = "cho";
             $equipeuser->motoboy_id =  $idmotoboy;
+            $equipeuser->valor_a_pagar =  $saldo;
             $equipeuser->save();
 
 
             //colocar o id do admin que so tem um que no cadso se o admin com id igual a 1
 
+
+                //atualizar saldo
+                $saldosupervisor = DB::table('dados_hirarquia_pagamento')
+                ->select(
+                    'valor_a_pagar'
+                )
+                ->where('dados_hirarquia_pagamento.dependent_user_id', '=',1 )
+                ->limit(1)
+                ->orderBy('id', 'desc')
+                ->get();
+   
+   
+            try {
+                $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
+            } catch (\Throwable $th) {
+                $saldo = 10;
+            }
+            //fim
+
             $equipeuser = new hierarquia;
             $equipeuser->dependent_user_id = 1;
             $equipeuser->nivel_de_acesso_dependent = "admin";
             $equipeuser->motoboy_id =  $idmotoboy;
+            $equipeuser->valor_a_pagar =  $saldo;
             $equipeuser->save();
 
 
@@ -772,8 +851,6 @@ class AdminController extends Controller
                 ->limit(1)
                 ->orderBy('id', 'desc')
                 ->get();
-
-
 
             return response()->json([
                 "Status"    => "sucess",
