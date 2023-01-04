@@ -219,6 +219,7 @@ class AdminController extends Controller
                 "user"    => $user
             ], 200);
         } catch (\Throwable $th) {
+            return $tr;
             return response()->json([
                 "Status"    => "Error",
                 "erro"    => $th,
