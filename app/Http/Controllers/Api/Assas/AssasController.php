@@ -96,6 +96,7 @@ class AssasController extends Controller
             '{
          "name": ' . $request->name . ',
          "email": ' . $request->email . ',
+         "externalReference": ' . $request->externalReference . ',
          "cpfCnpj": "12328011004",
             }',
             'json'
