@@ -45,6 +45,8 @@ class AdminController extends Controller
             ];
             return $page;
         }
+
+        return $paginator;
         $page = [
             "npagina" => $paginator->currentPage(),
             "nTotpagina" => $paginator->lastPage(),
