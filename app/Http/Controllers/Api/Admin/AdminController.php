@@ -237,6 +237,7 @@ class AdminController extends Controller
             $user = new User;
             $user->name = $request->nome;
             $user->email = $request->email;
+            $user->customer_assas = $request->customer_assas;
             $user->password = bcrypt('password');
             $user->niveis_acesso_id = 5;
             $user->save();
@@ -314,6 +315,7 @@ class AdminController extends Controller
             $user = new User;
             $user->name = $request->nome;
             $user->email = $request->email;
+            $user->customer_assas = $request->customer_assas;
             $user->password = bcrypt('password');
             $user->niveis_acesso_id = 4;
             $user->save();
@@ -373,6 +375,7 @@ class AdminController extends Controller
             $user = new User;
             $user->name = $request->nome;
             $user->email = $request->email;
+            $user->customer_assas = $request->customer_assas;
             $user->password = bcrypt('password');
             $user->niveis_acesso_id = 3;
             $user->save();
@@ -416,6 +419,7 @@ class AdminController extends Controller
             $user = new User;
             $user->name = $request->nome;
             $user->email = $request->email;
+            $user->customer_assas = $request->customer_assas;
             $user->password = bcrypt('password');
             $user->niveis_acesso_id = 2;
             $user->save();
