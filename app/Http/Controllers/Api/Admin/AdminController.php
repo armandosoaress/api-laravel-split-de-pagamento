@@ -586,6 +586,7 @@ class AdminController extends Controller
 
                 return $saldo;
      
+                
             //fim
 
             $equipeuser = new hierarquia;
