@@ -582,11 +582,8 @@ class AdminController extends Controller
                 ->orderBy('id', 'desc')
                 ->get();
 
-            try {
                 $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
-            } catch (\Throwable $th) {
-                $saldo = 10;
-            }
+     
             //fim
 
             $equipeuser = new hierarquia;
@@ -613,7 +610,7 @@ class AdminController extends Controller
 
 
              //atualizar saldo
-             $saldosupervisor = DB::table('dados_hirarquia_pagamento')
+             $saldorecrutador = DB::table('dados_hirarquia_pagamento')
              ->select(
                  'valor_a_pagar'
              )
@@ -623,13 +620,9 @@ class AdminController extends Controller
              ->get();
 
 
-         try {
-             $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
-         } catch (\Throwable $th) {
-             $saldo = 10;
-         }
+             $saldo = $saldorecrutador[0]->valor_a_pagar + 10;
+   
          //fim
-
 
             $equipeuser = new hierarquia;
             $equipeuser->dependent_user_id = $idrecrutador;
@@ -665,11 +658,9 @@ class AdminController extends Controller
                 ->get();
    
    
-            try {
+  
                 $saldo = $saldosupervisor[0]->valor_a_pagar + 15;
-            } catch (\Throwable $th) {
-                $saldo = 15;
-            }
+        
             //fim
 
             $equipeuser = new hierarquia;
@@ -705,11 +696,9 @@ class AdminController extends Controller
                 ->get();
    
    
-            try {
+          
                 $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
-            } catch (\Throwable $th) {
-                $saldo = 10;
-            }
+         
             //fim
 
             $equipeuser = new hierarquia;
@@ -734,11 +723,9 @@ class AdminController extends Controller
                 ->get();
    
    
-            try {
+        
                 $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
-            } catch (\Throwable $th) {
-                $saldo = 10;
-            }
+           
             //fim
 
             $equipeuser = new hierarquia;
