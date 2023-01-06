@@ -583,6 +583,8 @@ class AdminController extends Controller
                 ->get();
 
                 $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
+
+                return $saldo;
      
             //fim
 
