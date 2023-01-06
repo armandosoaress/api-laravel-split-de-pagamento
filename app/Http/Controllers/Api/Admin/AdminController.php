@@ -528,7 +528,6 @@ class AdminController extends Controller
 
             $idmotoboy = $request->id_motoboy;
 
-            // return $request->id_motoboy;
 
 
             $motoboynumregister = DB::table('dados_hirarquia_pagamento')
