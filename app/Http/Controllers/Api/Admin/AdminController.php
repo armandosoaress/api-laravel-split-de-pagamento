@@ -548,6 +548,7 @@ class AdminController extends Controller
             try {
                 $user->save();
             } catch (\Throwable $th) {
+                return $th;
                 return response()->json([
                     "Status"    => "motoboy ja comprou maquininhaaa"
                 ], 200);
