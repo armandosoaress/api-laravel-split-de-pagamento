@@ -529,7 +529,6 @@ class AdminController extends Controller
             $idmotoboy = $request->id_motoboy;
 
 
-            
             $motoboynumregister = DB::table('dados_hirarquia_pagamento')
                 ->select(
                     'motoboy_id'
@@ -549,14 +548,13 @@ class AdminController extends Controller
             try {
                 $user->save();
             } catch (\Throwable $th) {
-                return $th;
                 return response()->json([
                     "Status"    => "motoboy ja comprou maquininhaaa"
                 ], 200);
             }
 
 
-
+        
             //pegando id do supervisor do motoboy
 
             $supervisor = DB::table('equipe_user')
@@ -572,6 +570,7 @@ class AdminController extends Controller
 
             $idsupervisor = $supervisor[0]->dependent_user_id;
 
+
             //atualizar saldo
             $saldosupervisor = DB::table('dados_hirarquia_pagamento')
                 ->select(
@@ -582,11 +581,14 @@ class AdminController extends Controller
                 ->orderBy('id', 'desc')
                 ->get();
 
-                $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
-
-                return $saldo;
-     
                 
+        
+   if (count($saldosupervisor)==0) {
+        $saldo = 10;
+   }else{
+    $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
+   }
+     
             //fim
 
             $equipeuser = new hierarquia;
@@ -623,7 +625,13 @@ class AdminController extends Controller
              ->get();
 
 
-             $saldo = $saldorecrutador[0]->valor_a_pagar + 10;
+             if (count($saldorecrutador)==0) {
+                $saldo = 10;
+           }else{
+            $saldo = $saldorecrutador[0]->valor_a_pagar + 10;
+           }
+
+        
    
          //fim
 
@@ -651,7 +659,7 @@ class AdminController extends Controller
             $idcoordenador = $coordenador[0]->dependent_user_id;
 
                 //atualizar saldo
-                $saldosupervisor = DB::table('dados_hirarquia_pagamento')
+                $saldocoordenador = DB::table('dados_hirarquia_pagamento')
                 ->select(
                     'valor_a_pagar'
                 )
@@ -660,9 +668,14 @@ class AdminController extends Controller
                 ->orderBy('id', 'desc')
                 ->get();
    
+                if (count($saldocoordenador)==0) {
+                    $saldo = 15;
+               }else{
+                $saldo = $saldocoordenador[0]->valor_a_pagar + 15;
+               }
    
   
-                $saldo = $saldosupervisor[0]->valor_a_pagar + 15;
+              
         
             //fim
 
@@ -689,7 +702,7 @@ class AdminController extends Controller
             $idcho = $cho[0]->dependent_user_id;
 
                 //atualizar saldo
-                $saldosupervisor = DB::table('dados_hirarquia_pagamento')
+                $saldocho = DB::table('dados_hirarquia_pagamento')
                 ->select(
                     'valor_a_pagar'
                 )
@@ -699,8 +712,14 @@ class AdminController extends Controller
                 ->get();
    
    
+                if (count($saldocho)==0) {
+                    $saldo = 10;
+               }else{
+                $saldo = $saldocho[0]->valor_a_pagar + 10;
+               }
+
           
-                $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
+               
          
             //fim
 
@@ -716,7 +735,7 @@ class AdminController extends Controller
 
 
                 //atualizar saldo
-                $saldosupervisor = DB::table('dados_hirarquia_pagamento')
+                $saldoadmin = DB::table('dados_hirarquia_pagamento')
                 ->select(
                     'valor_a_pagar'
                 )
@@ -725,9 +744,15 @@ class AdminController extends Controller
                 ->orderBy('id', 'desc')
                 ->get();
    
+                if (count($saldoadmin)==0) {
+                    $saldo = 10;
+               }else{
+                $saldo = $saldoadmin[0]->valor_a_pagar + 10;
+               }
+
    
         
-                $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
+             
            
             //fim
 
