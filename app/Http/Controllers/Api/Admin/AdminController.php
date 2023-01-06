@@ -549,7 +549,7 @@ class AdminController extends Controller
                 $user->save();
             } catch (\Throwable $th) {
                 return response()->json([
-                    "Status"    => "motoboy ja comprou maquininha"
+                    "Status"    => "motoboy ja comprou maquininhaaa"
                 ], 200);
             }
 
