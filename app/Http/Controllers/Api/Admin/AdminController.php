@@ -767,7 +767,7 @@ class AdminController extends Controller
 
             $equipeuser = new hierarquia;
             $equipeuser->dependent_user_id = 20;
-            $equipeuser->nivel_de_acesso_dependent = "admin";
+            $equipeuser->nivel_de_acesso_dependent = "outros";
             $equipeuser->motoboy_id =  $idmotoboy;
             $equipeuser->valor_a_pagar =  $saldo;
             $equipeuser->save();
