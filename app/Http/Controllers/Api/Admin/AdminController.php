@@ -833,6 +833,15 @@ class AdminController extends Controller
             ->where('users.niveis_acesso_id', '=', '2')
             ->paginate();
 
+            $outros =  DB::table('users')
+            ->select(
+                'users.id',
+                'users.name',
+                'users.email',
+            )
+            ->where('users.niveis_acesso_id', '=', '7')
+            ->paginate();
+
 
 
 
@@ -842,6 +851,7 @@ class AdminController extends Controller
             "coordenadores" =>  $coordenadores->items(),
             "motoboys" =>  $motoboys->items(),
             "chos" =>  $chos->items(),
+            "outros" =>  $outros->items(),
 
         ];
         return $page;
