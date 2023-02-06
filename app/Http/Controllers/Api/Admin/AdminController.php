@@ -792,7 +792,7 @@ class AdminController extends Controller
                 "idadmin"    =>  1,
             ], 200);
         } catch (\Throwable $th) {
-            return $th;
+            // return $th;
             return response()->json([
                 "Status"    => "erro",
             ], 200);
