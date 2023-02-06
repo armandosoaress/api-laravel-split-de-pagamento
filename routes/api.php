@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\Coordenador\CoordenadorController;
 use App\Http\Controllers\Api\Supervisor\SupervisorController;
 use App\Http\Controllers\Api\Cho\ChoController;
 use App\Http\Controllers\Api\Assas\AssasController;
+use App\Http\Controllers\Api\Motoboy\MotoboyController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -58,6 +59,10 @@ Route::middleware('auth:sanctum')->get('/supervisorusers',  [SupervisorControlle
 
 //rotas de CHO
 Route::middleware('auth:sanctum')->get('/chousers',  [ChoController::class, 'index']);
+//
+
+//rotas de motoboy
+Route::middleware('auth:sanctum')->get('/termsandservices',  [MotoboyController::class, 'index']);
 //
 
 //rotas de asssas
