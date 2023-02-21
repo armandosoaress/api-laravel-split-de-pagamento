@@ -67,6 +67,7 @@ Route::middleware('auth:sanctum')->put('/termsandservices',  [MotoboyController:
 
 Route::middleware('auth:sanctum')->get('/dateChecked',  [MotoboyController::class, 'indexdateChecked']);
 Route::post('/dateChecked',  [MotoboyController::class, 'dateChecked']);
+Route::post('/photodateChecked',  [MotoboyController::class, 'photodateChecked']);
 //
 
 //rotas de asssas
