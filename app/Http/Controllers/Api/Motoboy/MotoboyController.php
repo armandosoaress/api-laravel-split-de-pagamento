@@ -121,4 +121,30 @@ class MotoboyController extends Controller
             return response()->json(['message' => $th], 500);
         }
     }
+
+
+    public function listmotoboys(Request $request)
+    {
+
+        $motoboys =  DB::table('users')
+            ->select(
+                'users.id',
+                'users.name',
+                'users.email',
+                 'niveis_acessos.nome as funcao',
+            )
+            ->join('niveis_acessos', 'niveis_acessos.idAcess', '=', 'users.niveis_acesso_id')
+            ->join('equipe_user', 'equipe_user.user_id', '=', 'users.id')
+            ->where('users.niveis_acesso_id', '=', '6')
+            ->where('equipe_user.dependent_user_id', '=', $request->id)
+            ->get();
+
+        return response()->json(
+            [
+                'message' => 'sucess',
+                'data' => $motoboys
+            ],
+            200
+        );
+    }
 }

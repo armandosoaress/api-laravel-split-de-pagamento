@@ -69,6 +69,8 @@ Route::middleware('auth:sanctum')->get('/dateChecked',  [MotoboyController::clas
 Route::post('/dateChecked',  [MotoboyController::class, 'dateChecked']);
 Route::post('/photodateChecked',  [MotoboyController::class, 'photodateChecked']);
 
+Route::middleware('auth:sanctum')->get('/motoboys',  [MotoboyController::class, 'listmotoboys']);
+
 
 //
 

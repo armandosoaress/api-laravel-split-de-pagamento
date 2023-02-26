@@ -125,9 +125,205 @@ class AdminController extends Controller
         return $page;
     }
 
+    public function cadmotoboyhierarquiarecho($id_user)
+    {
+        $equipeuser = new equipeuser;
+        $equipeuser->dependent_user_id = 1;
+        $equipeuser->nivel_de_acesso_dependent = "admin";
+        $equipeuser->user_id =  $id_user;
+        $equipeuser->save();
+    }
+
+    public function cadmotoboyhierarquiarecoordenador($id_user, $id_coordenador)
+    {
+
+        $cho = DB::table('equipe_user')
+            ->select(
+                'equipe_user.id',
+                'equipe_user.nivel_de_acesso_dependent',
+                'equipe_user.dependent_user_id',
+            )
+            ->where('equipe_user.nivel_de_acesso_dependent', '=', "cho")
+            ->where('equipe_user.user_id', '=', $id_coordenador)
+            ->get();
+
+        $equipeuser = new equipeuser;
+        $equipeuser->dependent_user_id = $cho[0]->dependent_user_id;
+        $equipeuser->nivel_de_acesso_dependent = "cho";
+        $equipeuser->user_id =  $id_user;
+        $equipeuser->save();
+
+
+        $equipeuser = new equipeuser;
+        $equipeuser->dependent_user_id = 1;
+        $equipeuser->nivel_de_acesso_dependent = "admin";
+        $equipeuser->user_id =  $id_user;
+        $equipeuser->save();
+    }
+
+
+    public function cadmotoboyhierarquiarecrutador($id_user, $id_recrutador)
+    {
+        $coordenador = DB::table('equipe_user')
+            ->select(
+                'equipe_user.id',
+                'equipe_user.nivel_de_acesso_dependent',
+                'equipe_user.dependent_user_id',
+            )
+            ->where('equipe_user.nivel_de_acesso_dependent', '=', "coordenador")
+            ->where('equipe_user.user_id', '=', $id_recrutador)
+            ->get();
+
+        $equipeuser = new equipeuser;
+        $equipeuser->dependent_user_id = $coordenador[0]->dependent_user_id;
+        $equipeuser->nivel_de_acesso_dependent = "coordenador";
+        $equipeuser->user_id =  $id_user;
+        $equipeuser->save();
+
+        $cho = DB::table('equipe_user')
+            ->select(
+                'equipe_user.id',
+                'equipe_user.nivel_de_acesso_dependent',
+                'equipe_user.dependent_user_id',
+            )
+            ->where('equipe_user.nivel_de_acesso_dependent', '=', "cho")
+            ->where('equipe_user.user_id', '=', $coordenador[0]->dependent_user_id)
+            ->get();
+
+        $equipeuser = new equipeuser;
+        $equipeuser->dependent_user_id = $cho[0]->dependent_user_id;
+        $equipeuser->nivel_de_acesso_dependent = "cho";
+        $equipeuser->user_id =  $id_user;
+        $equipeuser->save();
+
+
+        $equipeuser = new equipeuser;
+        $equipeuser->dependent_user_id = 1;
+        $equipeuser->nivel_de_acesso_dependent = "admin";
+        $equipeuser->user_id =  $id_user;
+        $equipeuser->save();
+    }
+
+
 
     public function storemotoboy(Request $request)
     {
+
+        //Caso o motoboy não tenha supervisor
+        if ($request->dependent_supervisor[0] == null) {
+
+            //dependent_supervisor o nome do campo que vem do front
+            //porem vem um array com 3 posições
+            //0 = supervisor
+            //1 = recrutador
+            //2 = coordenador
+            //3 = cho
+
+            try {
+                $user = new User;
+                $user->name = $request->nome;
+                $user->email = $request->email;
+                $user->customer_assas = $request->customer_assas;
+                $user->password = bcrypt('password');
+                $user->niveis_acesso_id = 6;
+                $user->save();
+
+                //inserindo na tabela dados user para motoboy
+
+                $Dadosuser = new dadosuser;
+                $Dadosuser->dados_user_id =  $user->id;
+                $Dadosuser->save();
+
+                $equipeuser = new equipeuser;
+                $equipeuser->dependent_user_id = $request->dependent_supervisor[0];
+                $equipeuser->nivel_de_acesso_dependent = "supervisor";
+                $equipeuser->user_id =  $user->id;
+                $equipeuser->save();
+
+
+                if ((int)$request->dependent_supervisor[1] == 0) {
+                    $equipeuser = new equipeuser;
+                    $equipeuser->dependent_user_id = null;
+                    $equipeuser->nivel_de_acesso_dependent = "recrutador";
+                    $equipeuser->user_id =  $user->id;
+                    $equipeuser->save();
+                } else {
+                    $id = (int)$request->dependent_supervisor[1];
+                    $equipeuser = new equipeuser;
+                    $equipeuser->dependent_user_id = $id;
+                    $equipeuser->nivel_de_acesso_dependent = "recrutador";
+                    $equipeuser->user_id =  $user->id;
+                    $equipeuser->save();
+                    $this->cadmotoboyhierarquiarecrutador($user->id, $id);
+                    return response()->json([
+                        "Status"    => "sucess",
+                        "user"    => $user
+                    ], 200);
+                }
+
+
+                if ((int)$request->dependent_supervisor[2] == 0) {
+                    $equipeuser = new equipeuser;
+                    $equipeuser->dependent_user_id = null;
+                    $equipeuser->nivel_de_acesso_dependent = "coordenador";
+                    $equipeuser->user_id =  $user->id;
+                    $equipeuser->save();
+                } else {
+                    $id = (int)$request->dependent_supervisor[2];
+                    $equipeuser = new equipeuser;
+                    $equipeuser->dependent_user_id = $id;
+                    $equipeuser->nivel_de_acesso_dependent = "coordenador";
+                    $equipeuser->user_id =  $user->id;
+                    $equipeuser->save();
+                    $this->cadmotoboyhierarquiarecoordenador($user->id, $id);
+                    return response()->json([
+                        "Status"    => "sucess",
+                        "user"    => $user
+                    ], 200);
+                }
+
+
+                if ((int)$request->dependent_supervisor[3] == 0) {
+                    $equipeuser = new equipeuser;
+                    $equipeuser->dependent_user_id = null;
+                    $equipeuser->nivel_de_acesso_dependent = "cho";
+                    $equipeuser->user_id =  $user->id;
+                    $equipeuser->save();
+                } else {
+                    $id = (int)$request->dependent_supervisor[3];
+                    $equipeuser = new equipeuser;
+                    $equipeuser->dependent_user_id = $id;
+                    $equipeuser->nivel_de_acesso_dependent = "cho";
+                    $equipeuser->user_id =  $user->id;
+                    $equipeuser->save();
+                    $this->cadmotoboyhierarquiarecho($user->id);
+                    return response()->json([
+                        "Status"    => "sucess",
+                        "user"    => $user
+                    ], 200);
+                }
+
+                $this->cadmotoboyhierarquiarecho($user->id);
+
+                $motoboys = new motoboys;
+                $motoboys->dados_user_id =  $user->id;
+                $motoboys->save();
+
+                return response()->json([
+                    "Status"    => "sucess",
+                    "user"    => $user
+                ], 200);
+            } catch (\Throwable $th) {
+                return response()->json([
+                    "Status"    => "Error",
+                    "erro"    => $th,
+                ], 200);
+            }
+        }
+
+
+        //caso ele tenha supervisor segue o fluxo normal
+
         try {
             //inserindo na tabela user para motoboy
 
@@ -145,10 +341,10 @@ class AdminController extends Controller
             $Dadosuser->dados_user_id =  $user->id;
             $Dadosuser->save();
 
-            //   //inserindo na tabela equipe user para motoboy
+            //inserindo na tabela equipe user para motoboy
 
             $equipeuser = new equipeuser;
-            $equipeuser->dependent_user_id = $request->dependent_supervisor;
+            $equipeuser->dependent_user_id =  $request->dependent_supervisor;
             $equipeuser->nivel_de_acesso_dependent = "supervisor";
             $equipeuser->user_id =  $user->id;
             $equipeuser->save();
@@ -163,8 +359,6 @@ class AdminController extends Controller
                 ->where('equipe_user.user_id', '=', $request->dependent_supervisor)
                 ->get();
 
-
-
             $equipeuser = new equipeuser;
             $equipeuser->dependent_user_id = $recrutador[0]->dependent_user_id;
             $equipeuser->nivel_de_acesso_dependent = "recrutador";
@@ -178,7 +372,7 @@ class AdminController extends Controller
                     'equipe_user.dependent_user_id',
                 )
                 ->where('equipe_user.nivel_de_acesso_dependent', '=', "coordenador")
-                ->where('equipe_user.user_id', '=', $request->dependent_supervisor)
+                ->where('equipe_user.user_id', '=', $recrutador[0]->dependent_user_id)
                 ->get();
 
             $equipeuser = new equipeuser;
@@ -194,7 +388,7 @@ class AdminController extends Controller
                     'equipe_user.dependent_user_id',
                 )
                 ->where('equipe_user.nivel_de_acesso_dependent', '=', "cho")
-                ->where('equipe_user.user_id', '=', $request->dependent_supervisor)
+                ->where('equipe_user.user_id', '=', $coordenador[0]->dependent_user_id)
                 ->get();
 
             $equipeuser = new equipeuser;
@@ -554,7 +748,7 @@ class AdminController extends Controller
             }
 
 
-        
+
             //pegando id do supervisor do motoboy
 
             $supervisor = DB::table('equipe_user')
@@ -581,14 +775,14 @@ class AdminController extends Controller
                 ->orderBy('id', 'desc')
                 ->get();
 
-                
-        
-   if (count($saldosupervisor)==0) {
-        $saldo = 10;
-   }else{
-    $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
-   }
-     
+
+
+            if (count($saldosupervisor) == 0) {
+                $saldo = 10;
+            } else {
+                $saldo = $saldosupervisor[0]->valor_a_pagar + 10;
+            }
+
             //fim
 
             $equipeuser = new hierarquia;
@@ -614,26 +808,26 @@ class AdminController extends Controller
             $idrecrutador = $recrutador[0]->dependent_user_id;
 
 
-             //atualizar saldo
-             $saldorecrutador = DB::table('dados_hirarquia_pagamento')
-             ->select(
-                 'valor_a_pagar'
-             )
-             ->where('dados_hirarquia_pagamento.dependent_user_id', '=', $idrecrutador)
-             ->limit(1)
-             ->orderBy('id', 'desc')
-             ->get();
+            //atualizar saldo
+            $saldorecrutador = DB::table('dados_hirarquia_pagamento')
+                ->select(
+                    'valor_a_pagar'
+                )
+                ->where('dados_hirarquia_pagamento.dependent_user_id', '=', $idrecrutador)
+                ->limit(1)
+                ->orderBy('id', 'desc')
+                ->get();
 
 
-             if (count($saldorecrutador)==0) {
+            if (count($saldorecrutador) == 0) {
                 $saldo = 10;
-           }else{
-            $saldo = $saldorecrutador[0]->valor_a_pagar + 10;
-           }
+            } else {
+                $saldo = $saldorecrutador[0]->valor_a_pagar + 10;
+            }
 
-        
-   
-         //fim
+
+
+            //fim
 
             $equipeuser = new hierarquia;
             $equipeuser->dependent_user_id = $idrecrutador;
@@ -658,8 +852,8 @@ class AdminController extends Controller
 
             $idcoordenador = $coordenador[0]->dependent_user_id;
 
-                //atualizar saldo
-                $saldocoordenador = DB::table('dados_hirarquia_pagamento')
+            //atualizar saldo
+            $saldocoordenador = DB::table('dados_hirarquia_pagamento')
                 ->select(
                     'valor_a_pagar'
                 )
@@ -667,16 +861,16 @@ class AdminController extends Controller
                 ->limit(1)
                 ->orderBy('id', 'desc')
                 ->get();
-   
-                if (count($saldocoordenador)==0) {
-                    $saldo = 15;
-               }else{
+
+            if (count($saldocoordenador) == 0) {
+                $saldo = 15;
+            } else {
                 $saldo = $saldocoordenador[0]->valor_a_pagar + 15;
-               }
-   
-  
-              
-        
+            }
+
+
+
+
             //fim
 
             $equipeuser = new hierarquia;
@@ -701,8 +895,8 @@ class AdminController extends Controller
 
             $idcho = $cho[0]->dependent_user_id;
 
-                //atualizar saldo
-                $saldocho = DB::table('dados_hirarquia_pagamento')
+            //atualizar saldo
+            $saldocho = DB::table('dados_hirarquia_pagamento')
                 ->select(
                     'valor_a_pagar'
                 )
@@ -710,17 +904,17 @@ class AdminController extends Controller
                 ->limit(1)
                 ->orderBy('id', 'desc')
                 ->get();
-   
-   
-                if (count($saldocho)==0) {
-                    $saldo = 10;
-               }else{
-                $saldo = $saldocho[0]->valor_a_pagar + 10;
-               }
 
-          
-               
-         
+
+            if (count($saldocho) == 0) {
+                $saldo = 10;
+            } else {
+                $saldo = $saldocho[0]->valor_a_pagar + 10;
+            }
+
+
+
+
             //fim
 
             $equipeuser = new hierarquia;
@@ -734,26 +928,26 @@ class AdminController extends Controller
             //colocar o id do admin que so tem um que no cadso se o admin com id igual a 1
 
 
-                //atualizar saldo
-                $saldoadmin = DB::table('dados_hirarquia_pagamento')
+            //atualizar saldo
+            $saldoadmin = DB::table('dados_hirarquia_pagamento')
                 ->select(
                     'valor_a_pagar'
                 )
-                ->where('dados_hirarquia_pagamento.dependent_user_id', '=',1 )
+                ->where('dados_hirarquia_pagamento.dependent_user_id', '=', 1)
                 ->limit(1)
                 ->orderBy('id', 'desc')
                 ->get();
-   
-                if (count($saldoadmin)==0) {
-                    $saldo = 10;
-               }else{
-                $saldo = $saldoadmin[0]->valor_a_pagar + 10;
-               }
 
-   
-        
-             
-           
+            if (count($saldoadmin) == 0) {
+                $saldo = 10;
+            } else {
+                $saldo = $saldoadmin[0]->valor_a_pagar + 10;
+            }
+
+
+
+
+
             //fim
 
             $equipeuser = new hierarquia;
@@ -851,7 +1045,7 @@ class AdminController extends Controller
             ->where('users.niveis_acesso_id', '=', '2')
             ->paginate();
 
-            $outros =  DB::table('users')
+        $outros =  DB::table('users')
             ->select(
                 'users.id',
                 'users.name',
